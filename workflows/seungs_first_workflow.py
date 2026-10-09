@@ -1,12 +1,12 @@
-"""My First Axon Workflow.
+"""Seung's First Axon Workflow.
 
 A two-step pipeline: an AI Team analyzes a contact record, then a
 deterministic Delegate transforms the analysis into a final report.
 
 Usage:
-    uv run axon graph  workflows.my_first_workflow            # preview the flow
-    uv run axon deploy workflows.my_first_workflow -n <your-namespace>
-    uv run axon run    workflows.my_first_workflow -n <your-namespace> --wait
+    uv run axon graph  workflows.seungs_first_workflow            # preview the flow
+    uv run axon deploy workflows.seungs_first_workflow -n <your-namespace>
+    uv run axon run    workflows.seungs_first_workflow -n <your-namespace> --wait
 """
 
 from __future__ import annotations
@@ -112,7 +112,7 @@ def format_report(context: Context, raw_input: str, analysis: str) -> dict:
 # Workflow
 # ---------------------------------------------------------------------------
 workflow = Workflow(
-    name="My_First_Workflow",
+    name="Seungs_First_Workflow",
     description="AI-analyze a contact record, then format a structured report.",
     steps=[
         Step(entity=analysis_team),
