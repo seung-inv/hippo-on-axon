@@ -1,0 +1,37 @@
+[project]
+name = "hippo-on-axon"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Seung Jun", email = "seung.jun@invisible.email" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "invisible-tech-axon-sdk>=1.3.0",
+]
+
+[project.scripts]
+hippo-on-axon = "hippo_on_axon:main"
+
+[build-system]
+requires = ["uv_build>=0.11.28,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.axon]
+name = "hippo-on-axon"
+default_namespace = "default"
+workflow_dir = "workflows"
+
+[[tool.uv.index]]
+name = "invisible-pypi-virtual"
+url = "https://registry.inv.tech/artifactory/api/pypi/invisible-pypi-virtual/simple"
+publish-url = "https://registry.inv.tech/artifactory/api/pypi/invisible-pypi-virtual"
+explicit = true
+
+[tool.uv.sources]
+invisible-tech-axon-sdk = { index = "invisible-pypi-virtual" }
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"

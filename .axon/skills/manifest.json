@@ -1,0 +1,20 @@
+{
+  "sdk_version": "0.0.0+g589c571d6e1d",
+  "projected_at": "2026-10-09T16:46:42.158071+00:00",
+  "owned": [
+    ".agents/skills/axon-accelerated-release",
+    ".agents/skills/axon-cli-test-loop",
+    ".agents/skills/axon-code-correctness",
+    ".agents/skills/axon-release-checklist",
+    ".agents/skills/axon-sdk-update-check",
+    ".agents/skills/axon-setup",
+    ".agents/skills/axon-whats-new",
+    ".claude/skills/axon-accelerated-release",
+    ".claude/skills/axon-cli-test-loop",
+    ".claude/skills/axon-code-correctness",
+    ".claude/skills/axon-release-checklist",
+    ".claude/skills/axon-sdk-update-check",
+    ".claude/skills/axon-setup",
+    ".claude/skills/axon-whats-new"
+  ]
+}
