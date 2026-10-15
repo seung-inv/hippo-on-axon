@@ -1,0 +1,8 @@
+{
+  "$schema": "https://gist.githubusercontent.com/seung-inv/033d8c2684088ae7f79c57b55c593d0b/raw/9ded19807dd219bcb2107fd728b21a99e9204661/opencode-v1-config.json",
+  "permission": {
+    "external_directory": {
+      "~/repos/_axon/agentic-core/**": "allow"
+    }
+  }
+}
