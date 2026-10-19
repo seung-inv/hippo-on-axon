@@ -1,2 +1,8 @@
 __pycache__
 .env
+/.vscode/settings.json
+/.playwright-mcp/*
+/logs/*.log
+
+hdm-tpch/*
+!hdm-tpch/tenants/tpch/sqlmesh/*
