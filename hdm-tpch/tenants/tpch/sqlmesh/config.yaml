@@ -1,0 +1,55 @@
+# --- Gateway Connection ---
+gateways:
+  default:
+    connection:
+      # For more information on configuring the connection to your execution engine, visit:
+      # https://sqlmesh.readthedocs.io/en/stable/reference/configuration/#connection
+      # https://sqlmesh.readthedocs.io/en/stable/integrations/engines/databricks/#connection-options
+      type: databricks
+      catalog: tpch
+      concurrent_tasks: 4
+      server_hostname: {{ env_var('DBR_RESEARCH_HOST') }}
+      http_path: {{ env_var('DBR_RESEARCH_HTTP_PATH') }}
+      auth_type: databricks-oauth
+      oauth_client_id: {{ env_var('DBR_HDM_TPCH_OAUTH_ID') }}
+      oauth_client_secret: {{ env_var('DBR_HDM_TPCH_OAUTH_SECRET') }}
+    state_connection:
+      type: postgres
+      host: {{ env_var('PG_SM_STATE_HOST') }}
+      port: {{ env_var('PG_SM_STATE_PORT') }}
+      database: {{ env_var('PG_SM_STATE_TPCH_DB') }}
+      user: {{ env_var('PG_SM_STATE_TPCH_USER') }}
+      password: {{ env_var('PG_SM_STATE_TPCH_PASSWORD') }}
+
+default_gateway: default
+default_target_environment: dev_{{ user() }}
+
+# A dev environment is deleted after this amount of inactivity. Only the admin
+# can recreate the deleted environment.
+environment_ttl: in 5 weeks
+
+plan:
+  # Recreate the target env on each plan so diffs are against prod, not the
+  # target env itself (falls back to target env if prod doesn't exist).
+  always_recreate_environment: true
+
+# --- Model Defaults ---
+# https://sqlmesh.readthedocs.io/en/stable/reference/model_configuration/#model-defaults
+
+model_defaults:
+  dialect: databricks
+  start: 1992-01-01   # Start date for backfill history
+  cron: '@daily'      # Run models daily at 12am UTC (can override per model)
+
+# --- Linting Rules ---
+# Enforce standards for your team
+# https://sqlmesh.readthedocs.io/en/stable/guides/linter/
+
+linter:
+  enabled: true
+  rules:
+    - ambiguousorinvalidcolumn
+    - invalidselectstarexpansion
+    - noambiguousprojections
+
+disable_anonymized_analytics: true
