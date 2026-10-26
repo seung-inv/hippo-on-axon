@@ -4,6 +4,24 @@ In this project, we are going to build Axon workflows that run sqlmesh commands 
 
 Check out `axon_learning_notes.md`, in which I accumulate my knowledge on Axon.
 
+## Running the Axon CLI
+
+Run `axon` commands through `scripts/axon_pat.sh` instead of calling `axon` directly:
+
+```sh
+scripts/axon_pat.sh deploy sqlmesh_info -n default
+scripts/axon_pat.sh run sqlmesh_info -n default --wait --json
+```
+
+- `AXON_API_KEY` in `.env` holds a personal access token (PAT) for the `api` use case.
+  The platform does not accept such a PAT as a direct Bearer token; it must first be exchanged at `/v1/pat/exchange` for a short-lived token.
+  SDK 1.3.0 does not perform this exchange, so plain `axon` commands fail with HTTP 401 (`revocation_check_failed` on pr5866).
+- The script performs the exchange (1-hour token, retrying on transient `503 pool_saturated`) and runs `axon` with the exchanged token as `AXON_API_KEY`, overriding `.env` for that command only.
+- The token is scoped to namespace `default`; set `AXON_PAT_NAMESPACE` to use another namespace.
+- Writing secrets with an exchanged token has not been tested.
+  If it is rejected, fall back to the Playwright browser-login procedure in `docs/sqlmesh_info_delegate.md`.
+- Never print or log the PAT or the exchanged token.
+
 ## Axon SDK Source Repo
 
 This project depends on the Axon SDK (`invisible-tech-axon-sdk`, imported as `axon`).
