@@ -12,14 +12,16 @@ RUNNER_SOURCE = ""
 
 
 @delegate(
-    description="Compute a SQLMesh plan for the TPCH project and summarize the changes for approval.",
+    description="Compute a SQLMesh plan for the TPCH project and summarize the changes for approval (SQLMesh 0.231.1).",
     outputs=[
         Variable(name="plan_fingerprint", type="String"),
         Variable(name="diff_summary", type="String"),
         Variable(name="has_changes", type="Boolean"),
     ],
     dependencies=[
-        "sqlmesh[databricks,duckdb]==0.236.3",
+        # Matches the shared TPCH state DB (SQLMesh refuses to plan against older
+        # state; sqlmesh_info does not check). Bump with `sqlmesh migrate`.
+        "sqlmesh[databricks,duckdb]==0.231.1",
         "databricks-sdk==0.154.0",
         "psycopg2-binary==2.9.13",
     ],
