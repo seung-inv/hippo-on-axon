@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.14"
 
 [[package]]
@@ -571,7 +571,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "databricks-sdk", specifier = ">=0.81.0" },
-    { name = "invisible-tech-axon-sdk", specifier = ">=1.3.0", index = "https://registry.inv.tech/artifactory/api/pypi/invisible-pypi-virtual/simple" },
+    { name = "invisible-tech-axon-sdk", specifier = ">=1.4.0", index = "https://registry.inv.tech/artifactory/api/pypi/invisible-pypi-virtual/simple" },
     { name = "psycopg2-binary", specifier = ">=2.9" },
     { name = "sqlmesh", extras = ["databricks", "duckdb", "lsp"], specifier = ">=0.228.5" },
 ]
@@ -633,7 +633,7 @@ wheels = [
 
 [[package]]
 name = "invisible-tech-axon-sdk"
-version = "1.3.0"
+version = "1.4.0"
 source = { registry = "https://registry.inv.tech/artifactory/api/pypi/invisible-pypi-virtual/simple" }
 dependencies = [
     { name = "copier" },
@@ -650,7 +650,7 @@ dependencies = [
     { name = "websockets" },
 ]
 wheels = [
-    { url = "https://registry.inv.tech/artifactory/api/pypi/invisible-pypi-virtual/invisible-tech-axon-sdk/1.3.0/invisible_tech_axon_sdk-1.3.0-py3-none-any.whl", hash = "sha256:c3292f049ae8ce7c326cc2e9e651ae04eb9ce6fed345c4dcb6e1e7b423662f0a" },
+    { url = "https://registry.inv.tech/artifactory/api/pypi/invisible-pypi-virtual/invisible-tech-axon-sdk/1.4.0/invisible_tech_axon_sdk-1.4.0-py3-none-any.whl", hash = "sha256:7551d6e6141d635e5e90cffc24ac2b896fd763bd09fe4b197f3f65d2b0e62eb0" },
 ]
 
 [[package]]
