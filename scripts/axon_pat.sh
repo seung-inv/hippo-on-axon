@@ -13,6 +13,9 @@
 #
 # Reads AXON_API_URL, AXON_TENANT_ID, and AXON_API_KEY (the PAT) from .env.
 # Set AXON_PAT_NAMESPACE to scope the token to a namespace other than `default`.
+# `axon` gets the same AXON_API_URL and AXON_TENANT_ID, so the token goes to the
+# cluster that minted it, not to the one in ~/.axon/local.env (an ephemeral env
+# such as pr5875 is selected by overriding the URL; Vik, 2026-10-28).
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -45,7 +48,7 @@ for attempt in range(5):
         timeout=30,
     )
     if r.status_code == 200:
-        print(r.json()["jit"])
+        print(r.json()["jit"], v["AXON_API_URL"], v["AXON_TENANT_ID"])
         break
     # 503 pool_saturated was observed to be transient; anything else is fatal.
     if r.status_code != 503:
@@ -56,4 +59,6 @@ else:
 PY
 )"
 
-AXON_API_KEY="$jit" PYTHONDONTWRITEBYTECODE=1 exec .venv/bin/axon "$@"
+read -r token url tenant <<<"$jit"
+AXON_API_KEY="$token" AXON_API_URL="$url" AXON_TENANT_ID="$tenant" PYTHONDONTWRITEBYTECODE=1 \
+  exec .venv/bin/axon "$@"
