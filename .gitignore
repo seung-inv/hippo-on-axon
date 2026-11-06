@@ -6,3 +6,6 @@ __pycache__
 
 hdm-tpch/*
 !hdm-tpch/tenants/tpch/sqlmesh/*
+
+hdm-anusha_playground/*
+!hdm-anusha_playground/tenants/anusha_playground/sqlmesh/*
