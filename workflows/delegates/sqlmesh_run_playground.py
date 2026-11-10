@@ -77,31 +77,53 @@ def run_sqlmesh_run_playground(
         # Matches the GitHub Actions SQLMesh Run job.
         "COLUMNS": "200",
     }
-    result = subprocess.run(
+    import time
+
+    def redact(text: str) -> str:
+        # Connection errors can contain connection strings; redact before persistence.
+        for value in sorted(set(settings.values()), key=len, reverse=True):
+            if value:
+                text = text.replace(value, "[REDACTED]")
+        return text
+
+    # Stream output (stderr merged) so a hang shows where it stopped in the
+    # execution's status messages instead of only after the timeout.
+    process = subprocess.Popen(
         [
             sys.executable,
             "-c",
             "from sqlmesh.cli.main import cli; cli()",
             "-p",
             str(project),
+            "--log-to-stdout",
             "run",
             environment,
         ],
-        capture_output=True,
-        input="",
+        # The sandbox has no /dev/null, so close an empty pipe instead of DEVNULL.
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
         text=True,
         env=env,
-        timeout=3600,
     )
-    output = (
-        f"exit={result.returncode}\n--- stdout ---\n{result.stdout}"
-        f"\n--- stderr ---\n{result.stderr}"
-    )
-    # Connection errors can contain connection strings; redact before persistence.
-    for value in sorted(set(settings.values()), key=len, reverse=True):
-        if value:
-            output = output.replace(value, "[REDACTED]")
+    assert process.stdin is not None
+    process.stdin.close()
+    deadline = time.monotonic() + 3600
+    lines: list[str] = []
+    assert process.stdout is not None
+    for line in process.stdout:
+        line = line.rstrip()
+        if not line or "_user_agent_entry" in line:
+            continue
+        lines.append(line)
+        context.status_message(redact(line)[:500])
+        if time.monotonic() > deadline:
+            process.kill()
+            lines.append("Timed out after 3600s.")
+            break
+    returncode = process.wait()
+    output = redact(f"exit={returncode}\n--- output ---\n" + "\n".join(lines))
     context.save_variable("sqlmesh_output", output)
-    if result.returncode != 0:
+    if returncode != 0:
         raise RuntimeError(f"SQLMesh run failed.\n{output}")
     return {"sqlmesh_output": output}
